@@ -66,10 +66,10 @@ namespace ARSMonitor
 
         private void drawServers()
         {
-            
-            foreach(PicAndLabelInline.UserControl1 server in servers)
+
+            foreach (PicAndLabelInline.UserControl1 server in servers)
             {
-                if (elements.Find(el => el.Child == server)==null)
+                if (elements.Find(el => el.Child == server) == null)
                 {
                     elements.Add(new System.Windows.Forms.Integration.ElementHost());
                     elements.Last().Child = server;
@@ -77,13 +77,23 @@ namespace ARSMonitor
                 }
             }
 
-            x = 50;
-            y = 50;
+            x = 25;
+            y = 25;
+
+            // заполняется сначала видимое пространство слева направо, сверху вниз.
+
             foreach (System.Windows.Forms.Integration.ElementHost el in elements)
             {
-                el.BackColor = SystemColors.Control;
+                //el.BackColor = SystemColors.Control;
                 el.SetBounds(x, y, 200, 48);
-                y += 50;
+
+                if (x + 205 > this.Width - 200)
+                {
+                    //MessageBox.Show("WIdth =" + this.Width + "x=" + x.ToString() + " y=" + y.ToString());
+                    x = 25;
+                    y += 50;
+                }
+                else x += 205; //MessageBox.Show("WIdth =" + this.Width + "x=" + x.ToString() + " y=" + y.ToString()); }
                 panel1.Controls.Add(el);
             }
         }
@@ -170,6 +180,11 @@ namespace ARSMonitor
                 toolStripStatusLabel1.Text = "Work Finished. ";
                 //MessageBox.Show("Finished counting words.");
                 ;
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            drawServers();
         }
     }
 }
