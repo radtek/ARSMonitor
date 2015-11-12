@@ -21,12 +21,13 @@ namespace ARSMonitor
         public bool workState = true;
 
         public void pingServers(        System.ComponentModel.BackgroundWorker worker,
-                                        System.ComponentModel.DoWorkEventArgs e
+                                        System.ComponentModel.DoWorkEventArgs e,
+                                        int[] speeds
             )
         {
             while (!worker.CancellationPending)
             {
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(speeds[0]);
                 Ping pingSender = new Ping();
                 PingOptions options = new PingOptions();
                 options.DontFragment = true;
@@ -64,7 +65,7 @@ namespace ARSMonitor
                 }
                 if (!workState)
                     System.Threading.Thread.Sleep(1000);
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(speeds[1]);
             }
             e.Cancel = true;
         }

@@ -20,18 +20,27 @@ namespace ARSMonitor
             InitializeComponent();
             toolStripProgressBar1.Visible = false;
             toolStripStatusLabel2.Visible = false;
+            directotries[0] = System.IO.Directory.GetCurrentDirectory();
+            speed1 = 30;
+            speed2 = 500;
+            o = new Options(this);
         }
 
-
-
+        Options o;
+        string[] directotries = new string[3];
+        public int speed1, speed2;
+            
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             networkProtocol np = new networkProtocol();
             np.serverList = servers;
-            backgroundWorker1.RunWorkerAsync(np);
-            toolStripProgressBar1.Visible = true;
-            toolStripStatusLabel2.Text = "Waiting for ping";
-            toolStripStatusLabel2.Visible = true;
+            if (!backgroundWorker1.IsBusy)
+            {
+                backgroundWorker1.RunWorkerAsync(np);
+                toolStripProgressBar1.Visible = true;
+                toolStripStatusLabel2.Text = "Waiting for ping";
+                toolStripStatusLabel2.Visible = true;
+            }
         }
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -96,9 +105,9 @@ namespace ARSMonitor
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //import servers list
+            // export servers list
             List<string> importString = new List<string>();
-            int i=0;
+            int i = 0;
             foreach (serverControl server in servers)
             {
                 importString.Add(server.objectAddress + " " + server.objectName + Environment.NewLine);
@@ -107,12 +116,11 @@ namespace ARSMonitor
             //if ()
 
             System.IO.File.WriteAllLines(@"Servers.txt", importString.ToArray<string>());
-            
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //export servers list
+            // import servers list
 
             string[] lines = System.IO.File.ReadAllLines(@"Servers.txt");
             foreach (string serv in lines)
@@ -130,12 +138,12 @@ namespace ARSMonitor
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+            int[] speeds = { speed1, speed2 };
             System.ComponentModel.BackgroundWorker worker;
             worker = (System.ComponentModel.BackgroundWorker)sender;
             networkProtocol np = (networkProtocol)e.Argument;
             np.workState = working;
-            np.pingServers(worker, e);
+            np.pingServers(worker, e, speeds);
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -170,6 +178,11 @@ namespace ARSMonitor
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             drawServers();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            o.ShowDialog();
         }
     }
 }
