@@ -10,7 +10,7 @@ namespace ARSMonitor
 {
     class networkProtocol
     {
-        public List<PicAndLabelInline.UserControl1> serverList;
+        public List<serverControl> serverList;
 
         public class CurrentState
         {
@@ -37,7 +37,7 @@ namespace ARSMonitor
                 double count = serverList.Count;
                 double i = 0;
                 int progress;
-                foreach (PicAndLabelInline.UserControl1 server in serverList)
+                foreach (ARSMonitor.serverControl server in serverList)
                 {
                     if (!workState)
                     {
@@ -54,26 +54,19 @@ namespace ARSMonitor
                         state.address = server.objectAddress;
                         state.isOnline = true;
                         worker.ReportProgress(progress, state);
-
-                        //server.objectStatus = true;
-                        //server.objectName = "GO!";
                     }
                     else
                     {
                         state.address = server.objectAddress;
                         state.isOnline = false;
                         worker.ReportProgress(progress, state);
-                        //server.objectStatus = false;
-                        //server.objectName = server.objectAddress + " STOPPED!";
                     }
                 }
                 if (!workState)
                     System.Threading.Thread.Sleep(1000);
                 System.Threading.Thread.Sleep(100);
             }
-
             e.Cancel = true;
-            
         }
     }
 }

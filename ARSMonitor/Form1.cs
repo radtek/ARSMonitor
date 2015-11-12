@@ -39,8 +39,7 @@ namespace ARSMonitor
             backgroundWorker1.CancelAsync();
         }
 
-        public List<PicAndLabelInline.UserControl1> servers = new List<PicAndLabelInline.UserControl1>();
-        public List<System.Windows.Forms.Integration.ElementHost> elements = new List<System.Windows.Forms.Integration.ElementHost>();
+        public List<serverControl> servers = new List<serverControl>();
         public int x = 50, y = 50;
         public bool working = true;
         public string n = "New";
@@ -53,7 +52,7 @@ namespace ARSMonitor
             f.ShowDialog();
             if (success)
             {
-                servers.Add(new PicAndLabelInline.UserControl1(n, a));
+                servers.Add(new ARSMonitor.serverControl(n, a));
                 //PicAndLabelInline.UserControl1 newHost = new PicAndLabelInline.UserControl1(n, a);
                 n = "New";
                 a = "192.168.0.4";
@@ -66,36 +65,23 @@ namespace ARSMonitor
 
         private void drawServers()
         {
-
-            foreach (PicAndLabelInline.UserControl1 server in servers)
-            {
-                if (elements.Find(el => el.Child == server) == null)
-                {
-                    elements.Add(new System.Windows.Forms.Integration.ElementHost());
-                    elements.Last().Child = server;
-                    //elements.Last().BackColorTransparent = true;
-                }
-            }
-
             x = 25;
             y = 25;
 
             // заполняется сначала видимое пространство слева направо, сверху вниз.
-
-            foreach (System.Windows.Forms.Integration.ElementHost el in elements)
+            foreach (serverControl server in servers)
             {
-                //el.BackColor = SystemColors.Control;
-                el.SetBounds(x, y, 200, 48);
+                server.SetBounds(x, y, 200, 48);
 
-                if (x + 205 > this.Width - 200)
+                if (x + 405 > this.Width - 25)
                 {
-                    //MessageBox.Show("WIdth =" + this.Width + "x=" + x.ToString() + " y=" + y.ToString());
-                    x = 25;
+                   x = 25;
                     y += 50;
                 }
-                else x += 205; //MessageBox.Show("WIdth =" + this.Width + "x=" + x.ToString() + " y=" + y.ToString()); }
-                panel1.Controls.Add(el);
+                else x += 205;
+                panel1.Controls.Add(server);
             }
+            
         }
 
         private void drawToolStripMenuItem_Click(object sender, EventArgs e)
@@ -113,7 +99,7 @@ namespace ARSMonitor
             //import servers list
             List<string> importString = new List<string>();
             int i=0;
-            foreach(PicAndLabelInline.UserControl1 server in servers)
+            foreach (serverControl server in servers)
             {
                 importString.Add(server.objectAddress + " " + server.objectName + Environment.NewLine);
                 i++;
@@ -136,7 +122,7 @@ namespace ARSMonitor
                     string[] splitted = serv.Split(' ');
                     n = splitted[1];
                     a = splitted[0];
-                    servers.Add(new PicAndLabelInline.UserControl1(n, a));
+                    servers.Add(new serverControl(n, a));
                 }
             }
             drawServers();
@@ -155,7 +141,6 @@ namespace ARSMonitor
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             networkProtocol.CurrentState state = (networkProtocol.CurrentState)e.UserState;
-            //MessageBox.Show(e.ProgressPercentage.ToString());
             toolStripProgressBar1.Value = e.ProgressPercentage;
             string isOn;
             if (state.isOnline)
@@ -163,7 +148,7 @@ namespace ARSMonitor
             else isOn = "OFFLINE!!!";
             toolStripStatusLabel2.Text = state.address + " is " + isOn + "...";
             toolStripStatusLabel1.Text = "Working. ";
-            PicAndLabelInline.UserControl1 server = servers.Find(x => x.objectAddress==state.address);
+            serverControl server = servers.Find(x => x.objectAddress == state.address);
             server.objectStatus = state.isOnline;
         }
 
