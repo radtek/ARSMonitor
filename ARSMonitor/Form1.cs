@@ -18,56 +18,50 @@ namespace ARSMonitor
         public Form1()
         {
             InitializeComponent();
+            toolStripProgressBar1.Visible = false;
+            toolStripStatusLabel2.Visible = false;
         }
+
+
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Ping pingSender = new Ping();
-            PingOptions options = new PingOptions();
-
-            options.DontFragment = true;
-
-            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            int timeout = 120;
-            foreach (PicAndLabelInline.UserControl1 server in servers)
-            {
-                //elements.Find(el => el.Child == server);
-                string host = server.objectAddress;
-                PingReply reply = pingSender.Send(host, timeout, buffer, options);
-                if (reply.Status == IPStatus.Success)
-                {
-                    server.objectStatus = true;
-                    //server.objectName = "GO!";
-                }
-                else
-                {
-                    server.objectStatus = false;
-                    server.objectName = server.objectAddress + " STOPPED!";
-                }
-            }
+            networkProtocol np = new networkProtocol();
+            np.serverList = servers;
+            backgroundWorker1.RunWorkerAsync(np);
+            toolStripProgressBar1.Visible = true;
+            toolStripStatusLabel2.Text = "Waiting for ping";
+            toolStripStatusLabel2.Visible = true;
         }
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            backgroundWorker1.CancelAsync();
         }
 
         public List<PicAndLabelInline.UserControl1> servers = new List<PicAndLabelInline.UserControl1>();
         public List<System.Windows.Forms.Integration.ElementHost> elements = new List<System.Windows.Forms.Integration.ElementHost>();
         public int x = 50, y = 50;
-
+        public bool working = true;
         public string n = "New";
         public string a = "192.168.0.4";
-
+        public bool success = false;
         private void addServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            working = false;
             ServerConstructor f = new ServerConstructor(this);
             f.ShowDialog();
-            servers.Add(new PicAndLabelInline.UserControl1(n, a));
-            //PicAndLabelInline.UserControl1 newHost = new PicAndLabelInline.UserControl1(n, a);
-            n = "New";
-            a = "192.168.0.4";
+            if (success)
+            {
+                servers.Add(new PicAndLabelInline.UserControl1(n, a));
+                //PicAndLabelInline.UserControl1 newHost = new PicAndLabelInline.UserControl1(n, a);
+                n = "New";
+                a = "192.168.0.4";
+                drawServers();
+
+                working = true;
+            }
+            else MessageBox.Show("Adding server cancelled. ");
         }
 
         private void drawServers()
@@ -135,6 +129,47 @@ namespace ARSMonitor
                     servers.Add(new PicAndLabelInline.UserControl1(n, a));
                 }
             }
+            drawServers();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+            System.ComponentModel.BackgroundWorker worker;
+            worker = (System.ComponentModel.BackgroundWorker)sender;
+            networkProtocol np = (networkProtocol)e.Argument;
+            np.workState = working;
+            np.pingServers(worker, e);
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            networkProtocol.CurrentState state = (networkProtocol.CurrentState)e.UserState;
+            //MessageBox.Show(e.ProgressPercentage.ToString());
+            toolStripProgressBar1.Value = e.ProgressPercentage;
+            string isOn;
+            if (state.isOnline)
+            isOn = "online";
+            else isOn = "OFFLINE!!!";
+            toolStripStatusLabel2.Text = state.address + " is " + isOn + "...";
+            toolStripStatusLabel1.Text = "Working. ";
+            PicAndLabelInline.UserControl1 server = servers.Find(x => x.objectAddress==state.address);
+            server.objectStatus = state.isOnline;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                toolStripStatusLabel1.Text = "ERROR! ";
+                MessageBox.Show("Error: " + e.Error.Message);
+            }
+            else if (e.Cancelled)
+                toolStripStatusLabel1.Text = "Work cancelled. ";
+            else
+                toolStripStatusLabel1.Text = "Work Finished. ";
+                //MessageBox.Show("Finished counting words.");
+                ;
         }
     }
 }

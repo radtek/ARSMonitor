@@ -16,6 +16,7 @@ namespace ARSMonitor
         public ServerConstructor(Form1 p)
         {
             parent = p;
+            parent.success = false;
             InitializeComponent();
         }
 
@@ -31,6 +32,7 @@ namespace ARSMonitor
         {
             parent.a = textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text;
             parent.n = textBox2.Text;
+            parent.success = true;
             Close();
         }
 
