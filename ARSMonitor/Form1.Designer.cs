@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +49,10 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -90,10 +95,12 @@
             // 
             // connectToolStripMenuItem
             // 
+            this.connectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.serialToolStripMenuItem,
+            this.parallelToolStripMenuItem});
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.connectToolStripMenuItem.Text = "Connect";
-            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
@@ -209,6 +216,33 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.WorkerReportsProgress = true;
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
+            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            // 
+            // serialToolStripMenuItem
+            // 
+            this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
+            this.serialToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.serialToolStripMenuItem.Text = "Serial";
+            this.serialToolStripMenuItem.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
+            // 
+            // parallelToolStripMenuItem
+            // 
+            this.parallelToolStripMenuItem.Name = "parallelToolStripMenuItem";
+            this.parallelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.parallelToolStripMenuItem.Text = "Parallel";
+            this.parallelToolStripMenuItem.Click += new System.EventHandler(this.parallelToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -252,6 +286,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem parallelToolStripMenuItem;
     }
 }
 
