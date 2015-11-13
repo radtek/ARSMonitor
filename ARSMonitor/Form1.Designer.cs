@@ -34,8 +34,12 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.featuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.addServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -47,14 +51,13 @@
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.переименоватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.перезагрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -99,13 +102,27 @@
             this.serialToolStripMenuItem,
             this.parallelToolStripMenuItem});
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
+            // 
+            // serialToolStripMenuItem
+            // 
+            this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
+            this.serialToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.serialToolStripMenuItem.Text = "Serial";
+            this.serialToolStripMenuItem.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
+            // 
+            // parallelToolStripMenuItem
+            // 
+            this.parallelToolStripMenuItem.Name = "parallelToolStripMenuItem";
+            this.parallelToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.parallelToolStripMenuItem.Text = "Parallel";
+            this.parallelToolStripMenuItem.Click += new System.EventHandler(this.parallelToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
@@ -122,6 +139,18 @@
             this.featuresToolStripMenuItem.Name = "featuresToolStripMenuItem";
             this.featuresToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.featuresToolStripMenuItem.Text = "Features";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem1.Text = "Options";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // addServerToolStripMenuItem
             // 
@@ -204,22 +233,13 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem1.Text = "Options";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
-            // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.переименоватьToolStripMenuItem,
+            this.перезагрузитьToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 70);
             // 
             // backgroundWorker2
             // 
@@ -229,19 +249,18 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
-            // serialToolStripMenuItem
+            // переименоватьToolStripMenuItem
             // 
-            this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
-            this.serialToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.serialToolStripMenuItem.Text = "Serial";
-            this.serialToolStripMenuItem.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
+            this.переименоватьToolStripMenuItem.Name = "переименоватьToolStripMenuItem";
+            this.переименоватьToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.переименоватьToolStripMenuItem.Text = "Переименовать";
+            this.переименоватьToolStripMenuItem.Click += new System.EventHandler(this.переименоватьToolStripMenuItem_Click);
             // 
-            // parallelToolStripMenuItem
+            // перезагрузитьToolStripMenuItem
             // 
-            this.parallelToolStripMenuItem.Name = "parallelToolStripMenuItem";
-            this.parallelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.parallelToolStripMenuItem.Text = "Parallel";
-            this.parallelToolStripMenuItem.Click += new System.EventHandler(this.parallelToolStripMenuItem_Click);
+            this.перезагрузитьToolStripMenuItem.Name = "перезагрузитьToolStripMenuItem";
+            this.перезагрузитьToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.перезагрузитьToolStripMenuItem.Text = "Перезагрузить";
             // 
             // Form1
             // 
@@ -259,6 +278,7 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,6 +310,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem parallelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem переименоватьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem перезагрузитьToolStripMenuItem;
     }
 }
 

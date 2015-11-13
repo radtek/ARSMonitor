@@ -27,7 +27,6 @@ namespace ARSMonitor
         {
             while (!worker.CancellationPending)
             {
-                System.Threading.Thread.Sleep(speeds[0]);
                 Ping pingSender = new Ping();
                 PingOptions options = new PingOptions();
                 options.DontFragment = true;
@@ -40,6 +39,7 @@ namespace ARSMonitor
                 int progress;
                 foreach (ARSMonitor.serverControl server in serverList)
                 {
+                    System.Threading.Thread.Sleep(speeds[0]);
                     if (worker.CancellationPending)
                     {
                         break;
@@ -93,7 +93,6 @@ namespace ARSMonitor
 
             while (!worker.CancellationPending)
             {
-                System.Threading.Thread.Sleep(speeds[0]);
                 PingReply reply = pingSender.Send(host, timeout, buffer, options);
                 if (reply.Status == IPStatus.Success)
                 {

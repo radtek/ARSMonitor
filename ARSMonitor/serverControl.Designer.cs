@@ -28,40 +28,67 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusImage = new System.Windows.Forms.PictureBox();
             this.objLabel = new System.Windows.Forms.Label();
+            this.statusImage = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ok = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.statusImage)).BeginInit();
             this.SuspendLayout();
+            // 
+            // objLabel
+            // 
+            this.objLabel.AutoSize = true;
+            this.objLabel.Location = new System.Drawing.Point(40, 11);
+            this.objLabel.Name = "objLabel";
+            this.objLabel.Size = new System.Drawing.Size(47, 13);
+            this.objLabel.TabIndex = 1;
+            this.objLabel.Text = "objLabel";
             // 
             // statusImage
             // 
             this.statusImage.Image = global::ARSMonitor.Properties.Resources.OFF;
             this.statusImage.InitialImage = global::ARSMonitor.Properties.Resources.OFF;
-            this.statusImage.Location = new System.Drawing.Point(0, 0);
+            this.statusImage.Location = new System.Drawing.Point(3, -1);
             this.statusImage.Name = "statusImage";
             this.statusImage.Size = new System.Drawing.Size(31, 46);
             this.statusImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.statusImage.TabIndex = 0;
             this.statusImage.TabStop = false;
             // 
-            // objLabel
+            // textBox1
             // 
-            this.objLabel.AutoSize = true;
-            this.objLabel.Location = new System.Drawing.Point(37, 11);
-            this.objLabel.Name = "objLabel";
-            this.objLabel.Size = new System.Drawing.Size(47, 13);
-            this.objLabel.TabIndex = 1;
-            this.objLabel.Text = "objLabel";
+            this.textBox1.Location = new System.Drawing.Point(43, 8);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(128, 20);
+            this.textBox1.TabIndex = 2;
+            this.textBox1.Visible = false;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            // 
+            // ok
+            // 
+            this.ok.Location = new System.Drawing.Point(100, 22);
+            this.ok.Name = "ok";
+            this.ok.Size = new System.Drawing.Size(75, 23);
+            this.ok.TabIndex = 3;
+            this.ok.Text = "button1";
+            this.ok.UseVisualStyleBackColor = true;
+            this.ok.Visible = false;
+            this.ok.Click += new System.EventHandler(this.ok_Click);
             // 
             // serverControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.ok);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.objLabel);
             this.Controls.Add(this.statusImage);
             this.Name = "serverControl";
-            this.Size = new System.Drawing.Size(176, 46);
-            ((System.ComponentModel.ISupportInitialize)(this.statusImage)).EndInit();
+            this.Size = new System.Drawing.Size(174, 44);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.serverControl_MouseDown);
+            this.MouseLeave += new System.EventHandler(this.serverControl_MouseLeave);
+           ((System.ComponentModel.ISupportInitialize)(this.statusImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -71,5 +98,7 @@
 
         private System.Windows.Forms.PictureBox statusImage;
         private System.Windows.Forms.Label objLabel;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button ok;
     }
 }

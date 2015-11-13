@@ -28,6 +28,7 @@ namespace ARSMonitor
         private bool status;
         private string name;
         private string address;
+        private bool mode;
 
         public bool objectStatus
         {
@@ -45,6 +46,27 @@ namespace ARSMonitor
             }
         }
 
+        public bool editMode
+        {
+            // Возвращает статус объекта.
+            get
+            {
+                return mode;
+            }
+            // Устанавливает статус объекта
+            // и обновляет графический индикатор
+            set
+            {
+                mode = value;
+                switchMode(mode);
+            }
+        }
+        public void switchMode(bool m)
+        {
+            if (m)
+                textBox1.Visible = true;
+            else textBox1.Visible = false;
+        }
         // функция переключения индикатора
         public void switchStatusImage(bool st)
         {
@@ -113,6 +135,31 @@ namespace ARSMonitor
             objectName = n;
             address = a;
             objectAddress = a;
+        }
+
+        private void serverControl_MouseLeave(object sender, EventArgs e)
+        {
+            BorderStyle = BorderStyle.FixedSingle;
+        }
+
+        private void serverControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            BorderStyle = BorderStyle.Fixed3D;
+        }
+
+        private void ok_Click(object sender, EventArgs e)
+        {
+            objectName = textBox1.Text;
+            textBox1.Visible = false;
+            editMode = false;
+        }
+
+        private void textBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyData==Keys.Enter)
+            {
+                ok_Click(null, null);
+            }
         }
     }
 }

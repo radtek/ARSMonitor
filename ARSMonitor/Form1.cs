@@ -45,12 +45,33 @@ namespace ARSMonitor
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            backgroundWorker1.CancelAsync();
-            backgroundWorker2.CancelAsync();
+            StopPinging();
+        }
+
+        private void StopPinging() // останавливаем опрос хостов
+        {
+            if(backgroundWorker1.IsBusy)
+                backgroundWorker1.CancelAsync();
+
+            if (backgroundWorker2.IsBusy)
+                backgroundWorker2.CancelAsync();
+            threadList.ForEach(cancelWork);
+            servers.ForEach(switchOff);
             cancel = true;
         }
 
-        public List<serverControl> servers = new List<serverControl>();
+        void cancelWork(BackgroundWorker bw)
+        {
+            if(bw.IsBusy)
+                bw.CancelAsync();
+        }
+        void switchOff(serverControl sC)
+        {
+            sC.objectStatus = false;
+        }
+
+        List<BackgroundWorker> threadList = new List<BackgroundWorker>(); // запуск ветки процесса на каждый хост.
+        public List<serverControl> servers = new List<serverControl>(); // список хостов
         public int x = 50, y = 50;
         public bool working = true;
         public string n = "New";
@@ -104,6 +125,7 @@ namespace ARSMonitor
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            StopPinging();
             Close();
         }
 
@@ -137,6 +159,10 @@ namespace ARSMonitor
                     servers.Add(new serverControl(n, a));
                 }
             }
+            servers.ForEach(delegate(serverControl serv)
+            {
+                serv.ContextMenuStrip = contextMenuStrip1;
+            });
             drawServers();
         }
 
@@ -223,6 +249,7 @@ namespace ARSMonitor
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            cancel = false;
             networkProtocol np = new networkProtocol();
             np.serverList = servers;
             if (!backgroundWorker1.IsBusy)
@@ -246,9 +273,9 @@ namespace ARSMonitor
 
         private void parallelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            cancel = false;
             networkProtocol np = new networkProtocol();
             np.serverList = servers;
-            List<BackgroundWorker> threadList = new List<BackgroundWorker>();
             foreach(serverControl server in servers)
             {
                 threadList.Add(new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true });
@@ -259,6 +286,7 @@ namespace ARSMonitor
                 toolStripProgressBar1.Visible = true;
                 toolStripStatusLabel2.Text = "Waiting for parallel ping";
                 toolStripStatusLabel2.Visible = true;
+                System.Threading.Thread.Sleep(speed1);
             }
         }
 
@@ -289,6 +317,12 @@ namespace ARSMonitor
                 toolStripStatusLabel1.Text = "Work Finished. ";
             //MessageBox.Show("Finished counting words.");
             ;
+        }
+
+        private void переименоватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            serverControl serv = contextMenuStrip1.SourceControl as serverControl;
+            serv.editMode = true;
         }
     }
 }
