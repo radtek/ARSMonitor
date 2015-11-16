@@ -456,6 +456,7 @@ namespace ARSMonitor
                 srv.Dispose();
                 servers.Remove(srv);
             }
+            drawServers();
         }
     }
 }
