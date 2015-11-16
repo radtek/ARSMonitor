@@ -63,6 +63,7 @@
             this.textBox1.TabIndex = 2;
             this.textBox1.Visible = false;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
             // 
             // ok
             // 
@@ -88,7 +89,7 @@
             this.Size = new System.Drawing.Size(174, 44);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.serverControl_MouseDown);
             this.MouseLeave += new System.EventHandler(this.serverControl_MouseLeave);
-           ((System.ComponentModel.ISupportInitialize)(this.statusImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.statusImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

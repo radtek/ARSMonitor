@@ -61,34 +61,29 @@ namespace ARSMonitor
                 switchMode(mode);
             }
         }
+
+        // переключение режима редактирования
         public void switchMode(bool m)
         {
             if (m)
+            {
+                textBox1.Text = objectName;
                 textBox1.Visible = true;
+                textBox1.Focus();
+            }
             else textBox1.Visible = false;
         }
+
         // функция переключения индикатора
         public void switchStatusImage(bool st)
         {
                 if (st) 
                 {
-                    /*BitmapImage bi3 = new BitmapImage();
-                    bi3.BeginInit();
-                    bi3.UriSource = new Uri("on.jpg", UriKind.Relative);
-                    bi3.EndInit();*/
                     statusImage.SizeMode = PictureBoxSizeMode.Zoom;
                     statusImage.Image = System.Drawing.Image.FromFile("on.jpg");
                 }
                 else 
                 {
-                    /*BitmapImage bi3 = new BitmapImage();
-                    bi3.BeginInit();
-                    bi3.UriSource = new Uri("off.jpg", UriKind.Relative);
-                    bi3.EndInit();
-                    statusImage.Stretch = Stretch.Uniform;
-                    statusImage.StretchDirection = StretchDirection.Both;
-                    statusImage.Source = bi3;*/
-
                     statusImage.SizeMode = PictureBoxSizeMode.Zoom;
                     statusImage.Image = System.Drawing.Image.FromFile("off.jpg");
                 }
@@ -150,7 +145,6 @@ namespace ARSMonitor
         private void ok_Click(object sender, EventArgs e)
         {
             objectName = textBox1.Text;
-            textBox1.Visible = false;
             editMode = false;
         }
 
@@ -160,6 +154,13 @@ namespace ARSMonitor
             {
                 ok_Click(null, null);
             }
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            //ok_Click(null, null);
+
+            editMode = false;
         }
     }
 }

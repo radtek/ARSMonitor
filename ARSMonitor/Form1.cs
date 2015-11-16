@@ -23,13 +23,60 @@ namespace ARSMonitor
             directotries[0] = System.IO.Directory.GetCurrentDirectory();
             speed1 = 30;
             speed2 = 500;
+
+            importingServers();
+            initOptions();
             o = new Options(this);
         }
 
+        void initOptions()
+        {
+            // файл опций жёстко структурирован
+            string[] lines = System.IO.File.ReadAllLines(@"C:\ARSMonitor\options.ini");
+            servPath = lines[0];
+            if (Int32.TryParse(lines[1], out speed1))
+            {
+                statusStrip1.Text = "Options initialized successfully";
+                if (Int32.TryParse(lines[2], out speed2))
+                {
+                    statusStrip1.Text = "Options initialized successfully";
+                    //MessageBox.Show("Successfully options importing.");
+                    if (lines[3] == "1")
+                    {
+                        isParallel = true;
+                        statusStrip1.Text = "Options initialized successfully";
+                    }
+                    else if (lines[3] == "0")
+                    {
+                        isParallel = false;
+                        statusStrip1.Text = "Options initialized successfully";
+                    }
+                    else
+                    {
+                        statusStrip1.Text = "Options initialization failed on string number " + "3" + "!";
+                        //MessageBox.Show("Successfully options importing.");
+                    }
+                }
+                else { statusStrip1.Text = "Options initialization failed on string number " + "2" + "!"; }
+            }
+            else { statusStrip1.Text = "Options initialization failed on string number " + "1" + "!"; }
+
+            foreach (string option in lines)
+            {
+                if (option != "")
+                {
+
+                }
+            }
+        }
+
+        // Опции. Константы и переменные опций.
         Options o;
         string[] directotries = new string[3];
         public int speed1, speed2;
-            
+        public bool isParallel = false;
+        public string servPath;
+
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             networkProtocol np = new networkProtocol();
@@ -50,7 +97,7 @@ namespace ARSMonitor
 
         private void StopPinging() // останавливаем опрос хостов
         {
-            if(backgroundWorker1.IsBusy)
+            if (backgroundWorker1.IsBusy)
                 backgroundWorker1.CancelAsync();
 
             if (backgroundWorker2.IsBusy)
@@ -60,11 +107,14 @@ namespace ARSMonitor
             cancel = true;
         }
 
+        // метод, создающий событие отмены для работающих фоновых процессов.
         void cancelWork(BackgroundWorker bw)
         {
-            if(bw.IsBusy)
+            if (bw.IsBusy)
                 bw.CancelAsync();
         }
+
+        // выключатель компонента.
         void switchOff(serverControl sC)
         {
             sC.objectStatus = false;
@@ -72,7 +122,7 @@ namespace ARSMonitor
 
         List<BackgroundWorker> threadList = new List<BackgroundWorker>(); // запуск ветки процесса на каждый хост.
         public List<serverControl> servers = new List<serverControl>(); // список хостов
-        public int x = 50, y = 50;
+        public int x = 25, y = 25;
         public bool working = true;
         public string n = "New";
         public string a = "192.168.0.4";
@@ -81,13 +131,18 @@ namespace ARSMonitor
 
         private void addServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            addServByMenu();
+        }
+
+        private void addServByMenu()
+        {
             working = false;
             ServerConstructor f = new ServerConstructor(this);
             f.ShowDialog();
+            // если форма опций
             if (success)
             {
-                servers.Add(new ARSMonitor.serverControl(n, a));
-                //PicAndLabelInline.UserControl1 newHost = new PicAndLabelInline.UserControl1(n, a);
+                addingServ(servers, n, a);
                 n = "New";
                 a = "192.168.0.4";
                 drawServers();
@@ -97,8 +152,26 @@ namespace ARSMonitor
             else MessageBox.Show("Adding server cancelled. ");
         }
 
+        private void addingServ(List<serverControl> servL, string n, string a)
+        {
+            // добавление уникального хоста в список для проверки
+            serverControl tempS = new serverControl(n, a);
+            if (!servL.Exists(x => x.objectAddress == a))
+            {
+                tempS.ContextMenuStrip = contextMenuStrip1;
+                servL.Add(tempS);
+            }
+            else
+            {   // сообщение о неуникальности
+                tempS = servL.Find(x => x.objectAddress == a);
+                MessageBox.Show("Уже существует хост с таким адресом. В программе имеет имя: " + tempS.objectName);
+            }
+        }
+
         private void drawServers()
         {
+            // отображение (перерисовка) контролов на форме
+
             x = 25;
             y = 25;
 
@@ -109,13 +182,13 @@ namespace ARSMonitor
 
                 if (x + 405 > this.Width - 25)
                 {
-                   x = 25;
+                    x = 25;
                     y += 50;
                 }
                 else x += 205;
                 panel1.Controls.Add(server);
             }
-            
+
         }
 
         private void drawToolStripMenuItem_Click(object sender, EventArgs e)
@@ -125,29 +198,26 @@ namespace ARSMonitor
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // остановка работы
             StopPinging();
+            // записать текущий список хостов в файл
+            exportingServers();
+            // закрытие главной формы
             Close();
         }
 
+
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // export servers list
-            List<string> importString = new List<string>();
-            int i = 0;
-            foreach (serverControl server in servers)
-            {
-                importString.Add(server.objectAddress + " " + server.objectName + Environment.NewLine);
-                i++;
-            }
-            //if ()
-
-            System.IO.File.WriteAllLines(@"Servers.txt", importString.ToArray<string>());
+            // import servers list from file
+            // импорт списка серверов из файла
+            importingServers();
         }
 
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void importingServers()
         {
-            // import servers list
-
+            // import servers list from file
+            // импорт списка серверов из файла
             string[] lines = System.IO.File.ReadAllLines(@"Servers.txt");
             foreach (string serv in lines)
             {
@@ -156,14 +226,39 @@ namespace ARSMonitor
                     string[] splitted = serv.Split(' ');
                     n = splitted[1];
                     a = splitted[0];
-                    servers.Add(new serverControl(n, a));
+                    addingServ(servers, n, a);
                 }
             }
+            /*
             servers.ForEach(delegate(serverControl serv)
             {
                 serv.ContextMenuStrip = contextMenuStrip1;
-            });
+            });*/
             drawServers();
+        }
+
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // export servers list into file
+            // экспорт списка серверов в файл
+            exportingServers();
+        }
+
+        private void exportingServers()
+        {
+            // export servers list into file
+            // экспорт списка серверов в файл
+            List<string> exportString = new List<string>();
+            int i = 0;
+            foreach (serverControl server in servers)
+            {
+                exportString.Add(server.objectAddress + " " + server.objectName + Environment.NewLine);
+                i++;
+            }
+            //if ()
+
+            System.IO.File.WriteAllLines(@"Servers.txt", exportString.ToArray<string>());
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -182,7 +277,7 @@ namespace ARSMonitor
             toolStripProgressBar1.Value = e.ProgressPercentage;
             string isOn;
             if (state.isOnline)
-            isOn = "online";
+                isOn = "online";
             else isOn = "OFFLINE!!!";
             toolStripStatusLabel2.Text = state.address + " is " + isOn + "...";
             toolStripStatusLabel1.Text = "Working. ";
@@ -191,7 +286,7 @@ namespace ARSMonitor
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
+        {   // 
             if (e.Error != null)
             {
                 toolStripStatusLabel1.Text = "ERROR! ";
@@ -201,8 +296,8 @@ namespace ARSMonitor
                 toolStripStatusLabel1.Text = "Work cancelled. ";
             else
                 toolStripStatusLabel1.Text = "Work Finished. ";
-                //MessageBox.Show("Finished counting words.");
-                ;
+            //MessageBox.Show("Finished counting words.");
+            ;
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -220,7 +315,7 @@ namespace ARSMonitor
 
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
-        {
+        {   // Параллельный поток для отдельного хоста (ускорение прохода по списку хостов).
             int[] speeds = { speed1, speed2 };
             System.ComponentModel.BackgroundWorker worker;
             worker = (System.ComponentModel.BackgroundWorker)sender;
@@ -228,26 +323,17 @@ namespace ARSMonitor
             serverControl serv = myArgs.srv;
             networkProtocol np = myArgs.netP;
             workState = working;
-            /*
-            while (!worker.CancellationPending)
-            {
-                foreach (serverControl server in servers)
-                {
-                    np.parallelPingServers(worker, e, speeds, server);
-                }
-                if (worker.CancellationPending)
-                {
-                    break;
-                }
-                System.Threading.Thread.Sleep(speed2);
-            }
-            e.Cancel = true;*/
             np.workState = working;
             np.parallelPingServers(worker, e, speeds, serv);
 
         }
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            serialPinging();
+        }
+
+        private void serialPinging()
         {
             cancel = false;
             networkProtocol np = new networkProtocol();
@@ -273,10 +359,15 @@ namespace ARSMonitor
 
         private void parallelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            parallelPinging();
+        }
+
+        private void parallelPinging()
+        {
             cancel = false;
             networkProtocol np = new networkProtocol();
             np.serverList = servers;
-            foreach(serverControl server in servers)
+            foreach (serverControl server in servers)
             {
                 threadList.Add(new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true });
                 threadList.Last().DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
@@ -323,6 +414,48 @@ namespace ARSMonitor
         {
             serverControl serv = contextMenuStrip1.SourceControl as serverControl;
             serv.editMode = true;
+        }
+
+        private void перезагрузитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            this.Focus();
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            panel1.Focus();
+        }
+
+        private void connectToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (isParallel)
+                parallelPinging();
+            else serialPinging();
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            serverControl serv = contextMenuStrip1.SourceControl as serverControl;
+            deleteHostFromList(serv);
+        }
+
+        private void deleteHostFromList(serverControl srv)
+        {
+            string message = "Вы уверены, что хотите удалить этот элемент?";
+            string caption = "Удалить " + srv.objectName;
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+            result = MessageBox.Show(message, caption, buttons);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                srv.Dispose();
+                servers.Remove(srv);
+            }
         }
     }
 }

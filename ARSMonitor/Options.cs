@@ -19,8 +19,14 @@ namespace ARSMonitor
             InitializeComponent(); 
             parent = p;
             trackBar1.Value = parent.speed1;
-            trackBar2.Value = parent.speed2;
+            trackBar2.Value = parent.speed2 / 500;
             textBox1.Text = trackBar1.Value.ToString();
+            parallelMode.Checked = parent.isParallel;
+
+
+            //string path = System.IO.Directory.GetCurrentDirectory();
+            //textBox3.Text = path;
+            textBox3.Text = parent.servPath;
 
             if ((trackBar2.Value / 2.0) >= 60)
             {
@@ -45,8 +51,6 @@ namespace ARSMonitor
 
         private void Options_Load(object sender, EventArgs e)
         {
-            string path = System.IO.Directory.GetCurrentDirectory();
-            textBox3.Text = path;
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -96,6 +100,8 @@ namespace ARSMonitor
             // 1
             setSpeed1();
             setSpeed2();
+            setParallelMode();
+            setPaths();
         }
 
         void cancel()
@@ -135,6 +141,21 @@ namespace ARSMonitor
                 textBox5.Visible = false;
                 label7.Visible = false;
             }
+        }
+
+        private void parallelMode_CheckedChanged(object sender, EventArgs e)
+        {
+            setParallelMode();
+        }
+
+        private void setParallelMode()
+        {
+            parent.isParallel = parallelMode.Checked;
+        }
+
+        private void setPaths()
+        {
+            parent.servPath = textBox3.Text;
         }
     }
 }

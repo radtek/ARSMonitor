@@ -52,9 +52,10 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.перезагрузкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.переToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.переименоватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.перезагрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -83,7 +84,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -104,12 +105,14 @@
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click_1);
             // 
             // serialToolStripMenuItem
             // 
             this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
             this.serialToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.serialToolStripMenuItem.Text = "Serial";
+            this.serialToolStripMenuItem.Visible = false;
             this.serialToolStripMenuItem.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
             // 
             // parallelToolStripMenuItem
@@ -117,6 +120,7 @@
             this.parallelToolStripMenuItem.Name = "parallelToolStripMenuItem";
             this.parallelToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.parallelToolStripMenuItem.Text = "Parallel";
+            this.parallelToolStripMenuItem.Visible = false;
             this.parallelToolStripMenuItem.Click += new System.EventHandler(this.parallelToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
@@ -143,47 +147,47 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(130, 22);
             this.toolStripMenuItem1.Text = "Options";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(127, 6);
             // 
             // addServerToolStripMenuItem
             // 
             this.addServerToolStripMenuItem.Name = "addServerToolStripMenuItem";
-            this.addServerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addServerToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.addServerToolStripMenuItem.Text = "Add server";
             this.addServerToolStripMenuItem.Click += new System.EventHandler(this.addServerToolStripMenuItem_Click);
             // 
             // drawToolStripMenuItem
             // 
             this.drawToolStripMenuItem.Name = "drawToolStripMenuItem";
-            this.drawToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.drawToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.drawToolStripMenuItem.Text = "Draw";
             this.drawToolStripMenuItem.Click += new System.EventHandler(this.drawToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(127, 6);
             // 
             // importyToolStripMenuItem
             // 
             this.importyToolStripMenuItem.Name = "importyToolStripMenuItem";
-            this.importyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importyToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.importyToolStripMenuItem.Text = "Export";
-            this.importyToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            this.importyToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.exportToolStripMenuItem.Text = "Import";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -194,6 +198,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(591, 334);
             this.panel1.TabIndex = 1;
+            this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
             // statusStrip1
             // 
@@ -236,10 +241,25 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.переименоватьToolStripMenuItem,
-            this.перезагрузитьToolStripMenuItem});
+            this.перезагрузкаToolStripMenuItem,
+            this.переToolStripMenuItem,
+            this.удалитьToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 92);
+            // 
+            // перезагрузкаToolStripMenuItem
+            // 
+            this.перезагрузкаToolStripMenuItem.Name = "перезагрузкаToolStripMenuItem";
+            this.перезагрузкаToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.перезагрузкаToolStripMenuItem.Text = "Переименовать";
+            this.перезагрузкаToolStripMenuItem.Click += new System.EventHandler(this.переименоватьToolStripMenuItem_Click);
+            // 
+            // переToolStripMenuItem
+            // 
+            this.переToolStripMenuItem.Name = "переToolStripMenuItem";
+            this.переToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.переToolStripMenuItem.Text = "Перезагрузить";
+            this.переToolStripMenuItem.Click += new System.EventHandler(this.перезагрузитьToolStripMenuItem_Click);
             // 
             // backgroundWorker2
             // 
@@ -249,18 +269,12 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
-            // переименоватьToolStripMenuItem
+            // удалитьToolStripMenuItem
             // 
-            this.переименоватьToolStripMenuItem.Name = "переименоватьToolStripMenuItem";
-            this.переименоватьToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.переименоватьToolStripMenuItem.Text = "Переименовать";
-            this.переименоватьToolStripMenuItem.Click += new System.EventHandler(this.переименоватьToolStripMenuItem_Click);
-            // 
-            // перезагрузитьToolStripMenuItem
-            // 
-            this.перезагрузитьToolStripMenuItem.Name = "перезагрузитьToolStripMenuItem";
-            this.перезагрузитьToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.перезагрузитьToolStripMenuItem.Text = "Перезагрузить";
+            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.удалитьToolStripMenuItem.Text = "Удалить";
+            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -274,6 +288,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
+            this.Click += new System.EventHandler(this.Form1_Click);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -310,8 +325,9 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem parallelToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem переименоватьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem перезагрузитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem перезагрузкаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem переToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
     }
 }
 
