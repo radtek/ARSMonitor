@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,11 +20,25 @@ namespace ARSMonitor
 {
     public partial class serverControl : System.Windows.Forms.UserControl
     {
-        public serverControl()
+        MainForm parent;
+        public serverControl(MainForm mf)
         {
+            parent = mf;
             InitializeComponent();
+            initOptions();
         }
 
+
+        void initOptions()
+        {
+            // файл опций жёстко структурирован
+            string[] lines = System.IO.File.ReadAllLines(@"C:\ARSMonitor\options.ini");
+            picON = lines[4];
+            picOFF = lines[5];
+        }
+
+
+        public string picON, picOFF;
         private bool status;
         private string name;
         private string address;
@@ -80,12 +94,12 @@ namespace ARSMonitor
                 if (st) 
                 {
                     statusImage.SizeMode = PictureBoxSizeMode.Zoom;
-                    statusImage.Image = System.Drawing.Image.FromFile("on.jpg");
+                    statusImage.Image = System.Drawing.Image.FromFile(picON);
                 }
                 else 
                 {
                     statusImage.SizeMode = PictureBoxSizeMode.Zoom;
-                    statusImage.Image = System.Drawing.Image.FromFile("off.jpg");
+                    statusImage.Image = System.Drawing.Image.FromFile(picOFF);
                 }
 
         }

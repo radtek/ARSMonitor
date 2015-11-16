@@ -1,6 +1,6 @@
 ﻿namespace ARSMonitor
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -199,7 +199,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 24);
-            this.panel1.Size = new System.Drawing.Size(591, 334);
+            this.panel1.Size = new System.Drawing.Size(591, 312);
             this.panel1.TabIndex = 1;
             this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
@@ -281,17 +281,18 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(591, 358);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.statusStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.Name = "MainForm";
+            this.Text = "Мониторинг компьютеров сети";
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.Click += new System.EventHandler(this.Form1_Click);
             this.menuStrip1.ResumeLayout(false);

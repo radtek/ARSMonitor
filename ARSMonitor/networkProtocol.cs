@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -46,7 +46,7 @@ namespace ARSMonitor
                     }
                     i++;
                     progress = (int)Math.Round((i / count) * 100);
-                    //elements.Find(el => el.Child == server);
+
                     string host = server.objectAddress; // сделать изменяемым в настройках
                     PingReply reply = pingSender.Send(host, timeout, buffer, options);
                     if (reply.Status == IPStatus.Success)

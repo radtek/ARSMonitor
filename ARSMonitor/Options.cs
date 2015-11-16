@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
+using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ARSMonitor
 {
     public partial class Options : Form
     {
+        string fileON, fileOFF;
         string speed1, speed2;
-        Form1 parent;
-        public Options(Form1 p)
+        MainForm parent;
+        public Options(MainForm p)
         {
-            InitializeComponent(); 
+            InitializeComponent();
             parent = p;
             trackBar1.Value = parent.speed1;
             trackBar2.Value = parent.speed2 / 500;
             textBox1.Text = trackBar1.Value.ToString();
             parallelMode.Checked = parent.isParallel;
 
+            textBox6.Text = fileON = parent.picON;
+            textBox7.Text = fileOFF = parent.picOFF;
 
             //string path = System.IO.Directory.GetCurrentDirectory();
             //textBox3.Text = path;
@@ -156,6 +159,34 @@ namespace ARSMonitor
         private void setPaths()
         {
             parent.servPath = textBox3.Text;
+            parent.picON = textBox6.Text;
+            parent.picOFF = textBox7.Text;
+        }
+
+        private void textBox6_DoubleClick(object sender, System.EventArgs e)
+        {
+            openFileDialog2.ShowDialog();
+        }
+
+        private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+            string fileON = openFileDialog2.FileName;
+            
+        }
+
+        private void button4_Click(object sender, System.EventArgs e)
+        {
+            openFileDialog2.ShowDialog();
+        }
+
+        private void button5_Click(object sender, System.EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            fileOFF = openFileDialog1.FileName;
         }
     }
 }

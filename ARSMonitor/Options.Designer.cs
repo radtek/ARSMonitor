@@ -47,6 +47,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.parallelMode = new System.Windows.Forms.CheckBox();
+            this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
@@ -96,6 +101,7 @@
             // 
             this.openFileDialog1.DefaultExt = "dat";
             this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // trackBar1
             // 
@@ -222,11 +228,57 @@
             this.parallelMode.UseVisualStyleBackColor = true;
             this.parallelMode.CheckedChanged += new System.EventHandler(this.parallelMode_CheckedChanged);
             // 
+            // openFileDialog2
+            // 
+            this.openFileDialog2.DefaultExt = "png";
+            this.openFileDialog2.FileName = "openFileDialog2";
+            this.openFileDialog2.InitialDirectory = "\\";
+            this.openFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog2_FileOk);
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(221, 133);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(113, 20);
+            this.textBox6.TabIndex = 20;
+            this.textBox6.DoubleClick += new System.EventHandler(this.textBox6_DoubleClick);
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(221, 163);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(113, 20);
+            this.textBox7.TabIndex = 21;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(340, 131);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(58, 23);
+            this.button4.TabIndex = 22;
+            this.button4.Text = "Обзор...";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(340, 161);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(58, 23);
+            this.button5.TabIndex = 23;
+            this.button5.Text = "Обзор...";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(410, 253);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox7);
+            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.parallelMode);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -276,5 +328,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckBox parallelMode;
+        private System.Windows.Forms.OpenFileDialog openFileDialog2;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }

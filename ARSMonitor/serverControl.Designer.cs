@@ -38,7 +38,7 @@
             // objLabel
             // 
             this.objLabel.AutoSize = true;
-            this.objLabel.Location = new System.Drawing.Point(40, 11);
+            this.objLabel.Location = new System.Drawing.Point(79, 11);
             this.objLabel.Name = "objLabel";
             this.objLabel.Size = new System.Drawing.Size(47, 13);
             this.objLabel.TabIndex = 1;
@@ -46,20 +46,23 @@
             // 
             // statusImage
             // 
+            this.statusImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.statusImage.Image = global::ARSMonitor.Properties.Resources.OFF;
             this.statusImage.InitialImage = global::ARSMonitor.Properties.Resources.OFF;
-            this.statusImage.Location = new System.Drawing.Point(3, -1);
+            this.statusImage.Location = new System.Drawing.Point(-1, -1);
+            this.statusImage.Margin = new System.Windows.Forms.Padding(4);
             this.statusImage.Name = "statusImage";
-            this.statusImage.Size = new System.Drawing.Size(31, 46);
+            this.statusImage.Padding = new System.Windows.Forms.Padding(2);
+            this.statusImage.Size = new System.Drawing.Size(57, 46);
             this.statusImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.statusImage.TabIndex = 0;
             this.statusImage.TabStop = false;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(43, 8);
+            this.textBox1.Location = new System.Drawing.Point(73, 8);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(128, 20);
+            this.textBox1.Size = new System.Drawing.Size(102, 20);
             this.textBox1.TabIndex = 2;
             this.textBox1.Visible = false;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);

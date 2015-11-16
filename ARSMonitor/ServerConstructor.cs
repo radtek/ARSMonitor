@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
+using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ARSMonitor
 {
     public partial class ServerConstructor : Form
     {
-        Form1 parent;
-        public ServerConstructor(Form1 p)
+        MainForm parent;
+        public ServerConstructor(MainForm p)
         {
             parent = p;
             parent.success = false;

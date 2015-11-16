@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -13,9 +13,9 @@ using System.Net.NetworkInformation;
 
 namespace ARSMonitor
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             toolStripProgressBar1.Visible = false;
@@ -31,43 +31,39 @@ namespace ARSMonitor
 
         void initOptions()
         {
+            int f = 0;
             // файл опций жёстко структурирован
             string[] lines = System.IO.File.ReadAllLines(@"C:\ARSMonitor\options.ini");
             servPath = lines[0];
-            if (Int32.TryParse(lines[1], out speed1))
+            if (!Int32.TryParse(lines[1], out speed1))
             {
-                statusStrip1.Text = "Options initialized successfully";
-                if (Int32.TryParse(lines[2], out speed2))
-                {
-                    statusStrip1.Text = "Options initialized successfully";
-                    //MessageBox.Show("Successfully options importing.");
-                    if (lines[3] == "1")
-                    {
-                        isParallel = true;
-                        statusStrip1.Text = "Options initialized successfully";
-                    }
-                    else if (lines[3] == "0")
-                    {
-                        isParallel = false;
-                        statusStrip1.Text = "Options initialized successfully";
-                    }
-                    else
-                    {
-                        statusStrip1.Text = "Options initialization failed on string number " + "3" + "!";
-                        //MessageBox.Show("Successfully options importing.");
-                    }
-                }
-                else { statusStrip1.Text = "Options initialization failed on string number " + "2" + "!"; }
+                f = 1;
             }
-            else { statusStrip1.Text = "Options initialization failed on string number " + "1" + "!"; }
-
-            foreach (string option in lines)
+            if (!Int32.TryParse(lines[2], out speed2))
             {
-                if (option != "")
-                {
-
-                }
+                f = 2;
             }
+
+
+            if (lines[3] == "1")
+            {
+                isParallel = true;
+            }
+            else if (lines[3] == "0")
+            {
+                isParallel = false;
+            }
+            else
+            {
+                f = 3;
+            }
+
+            picON = lines[4];
+            picOFF = lines[5];
+
+            if (f != 0)
+                toolStripStatusLabel1.Text = "Options initialization failed on string number " + f.ToString() + "!";
+            else toolStripStatusLabel1.Text = "Options initialized successfully";
         }
 
         // Опции. Константы и переменные опций.
@@ -76,6 +72,7 @@ namespace ARSMonitor
         public int speed1, speed2;
         public bool isParallel = false;
         public string servPath;
+        public string picON, picOFF;
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -218,7 +215,7 @@ namespace ARSMonitor
         {
             // import servers list from file
             // импорт списка серверов из файла
-            string[] lines = System.IO.File.ReadAllLines(@"Servers.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\ARSMonitor\Servers");
             foreach (string serv in lines)
             {
                 if (serv != "")
@@ -258,7 +255,7 @@ namespace ARSMonitor
             }
             //if ()
 
-            System.IO.File.WriteAllLines(@"Servers.txt", exportString.ToArray<string>());
+            System.IO.File.WriteAllLines(@"C:\ARSMonitor\Servers", exportString.ToArray<string>());
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -274,7 +271,7 @@ namespace ARSMonitor
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             networkProtocol.CurrentState state = (networkProtocol.CurrentState)e.UserState;
-            toolStripProgressBar1.Value = e.ProgressPercentage;
+            //toolStripProgressBar1.Value = e.ProgressPercentage;
             string isOn;
             if (state.isOnline)
                 isOn = "online";
