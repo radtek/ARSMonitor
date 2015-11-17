@@ -105,6 +105,8 @@ namespace ARSMonitor
             setSpeed2();
             setParallelMode();
             setPaths();
+
+            
         }
 
         void cancel()
@@ -161,6 +163,8 @@ namespace ARSMonitor
             parent.servPath = textBox3.Text;
             parent.picON = textBox6.Text;
             parent.picOFF = textBox7.Text;
+            parent.servers.ForEach(x => x.picktOnPath(parent.picON));
+            parent.servers.ForEach(x => x.picktOffPath(parent.picOFF));
         }
 
         private void textBox6_DoubleClick(object sender, System.EventArgs e)
@@ -170,8 +174,8 @@ namespace ARSMonitor
 
         private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
         {
-            string fileON = openFileDialog2.FileName;
-            
+            fileON = openFileDialog2.FileName;
+            textBox6.Text = fileON;
         }
 
         private void button4_Click(object sender, System.EventArgs e)
@@ -187,6 +191,7 @@ namespace ARSMonitor
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             fileOFF = openFileDialog1.FileName;
+            textBox7.Text = fileOFF;
         }
     }
 }

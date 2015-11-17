@@ -33,11 +33,11 @@ namespace ARSMonitor
                 string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // сделать размер буфера изменяемым в настройках
                 CurrentState state = new CurrentState();
                 byte[] buffer = Encoding.ASCII.GetBytes(data); // сделать изменяемым в настройках
-                int timeout = 120; // сделать изменяемым в настройках
+                int timeout = speeds[2]; // сделать изменяемым в настройках
                 double count = serverList.Count;
                 double i = 0;
                 int progress;
-                foreach (ARSMonitor.serverControl server in serverList)
+                foreach (serverControl server in serverList)
                 {
                     System.Threading.Thread.Sleep(speeds[0]);
                     if (worker.CancellationPending)

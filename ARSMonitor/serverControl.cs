@@ -21,9 +21,9 @@ namespace ARSMonitor
     public partial class serverControl : System.Windows.Forms.UserControl
     {
         MainForm parent;
-        public serverControl(MainForm mf)
+        public serverControl()
         {
-            parent = mf;
+            // parent = mf;
             InitializeComponent();
             initOptions();
         }
@@ -60,6 +60,16 @@ namespace ARSMonitor
             }
         }
 
+        public void picktOnPath(string str)
+        {
+            picON = str;
+        }
+
+        public void picktOffPath(string str)
+        {
+            picOFF = str;
+        }
+
         public bool editMode
         {
             // Возвращает статус объекта.
@@ -75,6 +85,15 @@ namespace ARSMonitor
                 switchMode(mode);
             }
         }
+
+        /*
+        public void refreshImage()
+        {
+            statusImage.Image = System.Drawing.Image.FromFile("C:\\ARSMonitor\\ON.png");
+            //statusImage.ImageLocation = "@/ON.png";// picON;
+            statusImage.Load();
+        }
+        */
 
         // переключение режима редактирования
         public void switchMode(bool m)
@@ -93,15 +112,20 @@ namespace ARSMonitor
         {
                 if (st) 
                 {
-                    statusImage.SizeMode = PictureBoxSizeMode.Zoom;
+                    statusImage.SizeMode = PictureBoxSizeMode.Zoom; // Загрузить в память или читать с диска
+                    //statusImage.Image = System.Drawing.Image.FromFile("C:\\ARSMonitor\\ON.png");
                     statusImage.Image = System.Drawing.Image.FromFile(picON);
+                    //statusImage.ImageLocation = "@/ON.png";// picON;
+                    //statusImage.Load();
                 }
                 else 
                 {
                     statusImage.SizeMode = PictureBoxSizeMode.Zoom;
+                    //statusImage.Image = System.Drawing.Image.FromFile("C:\\ARSMonitor\\OFF.png");
                     statusImage.Image = System.Drawing.Image.FromFile(picOFF);
+                    //statusImage.ImageLocation = "@/OFF.png";// picOFF;
+                    //statusImage.Load();
                 }
-
         }
 
 

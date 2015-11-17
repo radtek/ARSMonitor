@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,7 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
-
+using System.Net.Sockets;
 
 namespace ARSMonitor
 {
@@ -24,12 +25,12 @@ namespace ARSMonitor
             speed1 = 30;
             speed2 = 500;
 
-            importingServers();
             initOptions();
             o = new Options(this);
+            importingServers();
         }
 
-        void initOptions()
+        void initOptions() // базовая инициализация настроек программы при запуске.
         {
             int f = 0;
             // файл опций жёстко структурирован
@@ -43,36 +44,41 @@ namespace ARSMonitor
             {
                 f = 2;
             }
+            if (!Int32.TryParse(lines[3], out speed3))
+            {
+                f = 3;
+            }
 
-
-            if (lines[3] == "1")
+            if (lines[4] == "1")
             {
                 isParallel = true;
             }
-            else if (lines[3] == "0")
+            else if (lines[4] == "0")
             {
                 isParallel = false;
             }
             else
             {
-                f = 3;
+                f = 4;
             }
 
-            picON = lines[4];
-            picOFF = lines[5];
+            picON = lines[5];
+            picOFF = lines[6];
 
             if (f != 0)
                 toolStripStatusLabel1.Text = "Options initialization failed on string number " + f.ToString() + "!";
             else toolStripStatusLabel1.Text = "Options initialized successfully";
         }
 
+
+
         // Опции. Константы и переменные опций.
         Options o;
         string[] directotries = new string[3];
-        public int speed1, speed2;
-        public bool isParallel = false;
-        public string servPath;
-        public string picON, picOFF;
+        public int speed1, speed2, speed3; // задержки при выполнении
+        public bool isParallel = false; // переключатель типа обхода
+        public string servPath = @"C:\ARSMonitor\Servers"; 
+        public string picON, picOFF; // путь к картинкам
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -175,8 +181,11 @@ namespace ARSMonitor
             // заполняется сначала видимое пространство слева направо, сверху вниз.
             foreach (serverControl server in servers)
             {
+                panel1.Controls.Remove(server);
+                server.picktOnPath(picON);
+                server.picktOffPath(picOFF);
                 server.SetBounds(x, y, 200, 48);
-
+                
                 if (x + 405 > this.Width - 25)
                 {
                     x = 25;
@@ -184,6 +193,7 @@ namespace ARSMonitor
                 }
                 else x += 205;
                 panel1.Controls.Add(server);
+                if (y + 50 > this.Height) {  }
             }
 
         }
@@ -215,7 +225,7 @@ namespace ARSMonitor
         {
             // import servers list from file
             // импорт списка серверов из файла
-            string[] lines = System.IO.File.ReadAllLines(@"C:\ARSMonitor\Servers");
+            string[] lines = System.IO.File.ReadAllLines(servPath);
             foreach (string serv in lines)
             {
                 if (serv != "")
@@ -255,12 +265,12 @@ namespace ARSMonitor
             }
             //if ()
 
-            System.IO.File.WriteAllLines(@"C:\ARSMonitor\Servers", exportString.ToArray<string>());
+            System.IO.File.WriteAllLines(servPath, exportString.ToArray<string>());
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            int[] speeds = { speed1, speed2 };
+            int[] speeds = { speed1, speed2, speed3 };
             System.ComponentModel.BackgroundWorker worker;
             worker = (System.ComponentModel.BackgroundWorker)sender;
             networkProtocol np = (networkProtocol)e.Argument;
@@ -271,7 +281,7 @@ namespace ARSMonitor
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             networkProtocol.CurrentState state = (networkProtocol.CurrentState)e.UserState;
-            //toolStripProgressBar1.Value = e.ProgressPercentage;
+            toolStripProgressBar1.Value = e.ProgressPercentage;
             string isOn;
             if (state.isOnline)
                 isOn = "online";
@@ -279,7 +289,10 @@ namespace ARSMonitor
             toolStripStatusLabel2.Text = state.address + " is " + isOn + "...";
             toolStripStatusLabel1.Text = "Working. ";
             serverControl server = servers.Find(x => x.objectAddress == state.address);
-            server.objectStatus = state.isOnline;
+            if (server.objectStatus != state.isOnline)
+            {
+                server.objectStatus = state.isOnline;
+            }
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -313,7 +326,7 @@ namespace ARSMonitor
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {   // Параллельный поток для отдельного хоста (ускорение прохода по списку хостов).
-            int[] speeds = { speed1, speed2 };
+            int[] speeds = { speed1, speed2, speed3 };
             System.ComponentModel.BackgroundWorker worker;
             worker = (System.ComponentModel.BackgroundWorker)sender;
             var myArgs = e.Argument as MyWorkerArgs;
@@ -389,7 +402,10 @@ namespace ARSMonitor
             toolStripStatusLabel2.Text = state.address + " is " + isOn + "...";
             toolStripStatusLabel1.Text = "Working. ";
             serverControl server = servers.Find(x => x.objectAddress == state.address);
-            server.objectStatus = state.isOnline;
+            if (server.objectStatus != state.isOnline)
+            {
+                server.objectStatus = state.isOnline;
+            }
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -415,7 +431,16 @@ namespace ARSMonitor
 
         private void перезагрузитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            serverControl serv = contextMenuStrip1.SourceControl as serverControl;
+            string hN = getHostName(serv);
+            Process p = Process.Start(@"cmd.exe", @"/c shutdown /r /m " + hN + " & pause");
+        }
 
+        private static string getHostName(serverControl serv)
+        {
+            IPAddress hostIPAddress = IPAddress.Parse(serv.objectAddress);
+            IPHostEntry hostInfo = Dns.GetHostEntry(hostIPAddress);
+            return hostInfo.HostName;
         }
 
         private void Form1_Click(object sender, EventArgs e)
