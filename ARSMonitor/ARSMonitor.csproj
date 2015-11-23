@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ARSMonitor</RootNamespace>
     <AssemblyName>ARSMonitor</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -71,6 +71,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="logNet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="logNet.Designer.cs">
+      <DependentUpon>logNet.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MyEventArgs.cs" />
+    <Compile Include="NetworkEventArgs.cs" />
     <Compile Include="networkProtocol.cs" />
     <Compile Include="Options.cs">
       <SubType>Form</SubType>
@@ -99,6 +106,9 @@
     <Compile Include="serverControl.Designer.cs">
       <DependentUpon>serverControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="logNet.resx">
+      <DependentUpon>logNet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

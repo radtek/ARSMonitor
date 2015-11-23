@@ -37,6 +37,9 @@
             this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendCommandToAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listenConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopListeningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.featuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,6 +60,7 @@
             this.переToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -93,7 +97,10 @@
             // 
             this.connectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
-            this.disconnectToolStripMenuItem});
+            this.disconnectToolStripMenuItem,
+            this.sendCommandToAllToolStripMenuItem,
+            this.listenConnectionsToolStripMenuItem,
+            this.stopListeningToolStripMenuItem});
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
             this.connectionToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.connectionToolStripMenuItem.Text = "Connection";
@@ -104,7 +111,7 @@
             this.serialToolStripMenuItem,
             this.parallelToolStripMenuItem});
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click_1);
             // 
@@ -127,9 +134,30 @@
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
+            // 
+            // sendCommandToAllToolStripMenuItem
+            // 
+            this.sendCommandToAllToolStripMenuItem.Name = "sendCommandToAllToolStripMenuItem";
+            this.sendCommandToAllToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.sendCommandToAllToolStripMenuItem.Text = "SendCommandToAll";
+            this.sendCommandToAllToolStripMenuItem.Click += new System.EventHandler(this.sendCommandToAllToolStripMenuItem_Click);
+            // 
+            // listenConnectionsToolStripMenuItem
+            // 
+            this.listenConnectionsToolStripMenuItem.Name = "listenConnectionsToolStripMenuItem";
+            this.listenConnectionsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.listenConnectionsToolStripMenuItem.Text = "ListenConnections";
+            this.listenConnectionsToolStripMenuItem.Click += new System.EventHandler(this.listenConnectionsToolStripMenuItem_Click);
+            // 
+            // stopListeningToolStripMenuItem
+            // 
+            this.stopListeningToolStripMenuItem.Name = "stopListeningToolStripMenuItem";
+            this.stopListeningToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.stopListeningToolStripMenuItem.Text = "StopListening";
+            this.stopListeningToolStripMenuItem.Click += new System.EventHandler(this.stopListeningToolStripMenuItem_Click);
             // 
             // featuresToolStripMenuItem
             // 
@@ -199,6 +227,8 @@
             // 
             // panel1
             // 
+            this.panel1.AutoScroll = true;
+            this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 24);
@@ -287,6 +317,14 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
+            // backgroundWorker3
+            // 
+            this.backgroundWorker3.WorkerReportsProgress = true;
+            this.backgroundWorker3.WorkerSupportsCancellation = true;
+            this.backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
+            this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
+            this.backgroundWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker3_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -299,8 +337,10 @@
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "MainForm";
             this.Text = "Мониторинг компьютеров сети";
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.Click += new System.EventHandler(this.Form1_Click);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -341,6 +381,10 @@
         private System.Windows.Forms.ToolStripMenuItem переToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getHostNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendCommandToAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listenConnectionsToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker3;
+        private System.Windows.Forms.ToolStripMenuItem stopListeningToolStripMenuItem;
     }
 }
 

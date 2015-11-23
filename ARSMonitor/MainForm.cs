@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -28,7 +29,22 @@ namespace ARSMonitor
             initOptions();
             o = new Options(this);
             importingServers();
+
+            refreshControlView();
         }
+
+        private void refreshControlView()
+        {
+            foreach (serverControl server in servers)
+            {
+                server.objectStatus = true;
+                server.objectStatus = false;
+            }
+        }
+
+
+
+        logNet log;
 
         void initOptions() // базовая инициализация настроек программы при запуске.
         {
@@ -192,8 +208,10 @@ namespace ARSMonitor
                     y += 50;
                 }
                 else x += 205;
+                
                 panel1.Controls.Add(server);
-                if (y + 50 > this.Height) {  }
+                //if (y + 50 > this.Height) {  }
+                 
             }
 
         }
@@ -312,6 +330,11 @@ namespace ARSMonitor
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
+            if (log != null)
+            {
+                log.Top = this.Top;
+                log.Left = this.Left + this.Width;
+            }
             drawServers();
         }
 
@@ -479,6 +502,100 @@ namespace ARSMonitor
                 servers.Remove(srv);
             }
             drawServers();
+        }
+
+        private void listenConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            log = new logNet();
+            AsynchronousSocketListener listen = new AsynchronousSocketListener();
+            //networkProtocol np = new networkProtocol();
+            //np.serverList = servers;
+            if (!backgroundWorker3.IsBusy)
+            {
+                backgroundWorker3.RunWorkerAsync(listen);
+                /* toolStripProgressBar1.Visible = true;
+                 toolStripStatusLabel2.Text = "Waiting for serial ping";
+                 toolStripStatusLabel2.Visible = true;*/
+
+                log.StartPosition = FormStartPosition.Manual;
+                log.Top = this.Top;
+                log.Left = this.Left + this.Width;
+                log.Show();
+            }
+            else MessageBox.Show("Not listening");
+        }
+
+        private void backgroundWorker3_DoWork(object sender1, DoWorkEventArgs e1)
+        {
+            AsynchronousSocketListener listen = e1.Argument as AsynchronousSocketListener;
+            
+
+            System.ComponentModel.BackgroundWorker worker;
+            worker = (System.ComponentModel.BackgroundWorker)sender1;
+
+            //e.Argument
+
+
+            listen.eventFromNetworkClass += delegate(object sender, NetworkEventArgs e)
+            {
+                log.textBox1.Invoke((Action)delegate
+                {
+                    log.textBox1.AppendText(e.Message);
+                    log.textBox1.AppendText(Environment.NewLine);
+                });
+            };
+
+            /*Task.Factory.StartNew((Action)delegate
+                    {
+                        //mc.Run();
+                        listen.StartListening(worker, e1);
+                    });*/
+            listen.StartListening(worker, e1);
+
+            /*
+            Task.Factory.StartNew((Action)delegate
+            {
+                //mc.Run();
+                aS.Start();
+            });*/
+        }
+
+        private void backgroundWorker3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void stopListeningToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            backgroundWorker3.CancelAsync();
+            log.Close();
+        }
+
+
+        private void backgroundWorker3_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string str = e.UserState as string;
+            toolStripStatusLabel1.Text = str;
+            log.textBox1.Text += str + Environment.NewLine + Environment.NewLine;
+        }
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (log != null)
+            {
+                log.Top = this.Top;
+                log.Left = this.Left + this.Width;
+            }
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            // log.Activate();
+        }
+
+        private void sendCommandToAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
