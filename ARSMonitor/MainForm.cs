@@ -28,8 +28,8 @@ namespace ARSMonitor
 
             initOptions();
             o = new Options(this);
+            expEdit = new MonitorExplorerEditor(this);
             importingServers();
-
             refreshControlView();
         }
 
@@ -45,6 +45,8 @@ namespace ARSMonitor
 
 
         logNet log;
+        AsynchronousSocketListener listen;
+        MonitorExplorerEditor expEdit;
 
         void initOptions() // базовая инициализация настроек программы при запуске.
         {
@@ -93,7 +95,7 @@ namespace ARSMonitor
         string[] directotries = new string[3];
         public int speed1, speed2, speed3; // задержки при выполнении
         public bool isParallel = false; // переключатель типа обхода
-        public string servPath = @"C:\ARSMonitor\Servers"; 
+        public string servPath = @"C:\ARSMonitor\Servers";
         public string picON, picOFF; // путь к картинкам
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -139,6 +141,8 @@ namespace ARSMonitor
             sC.objectStatus = false;
         }
 
+
+        public List<ContextCommands> commands = new List<ContextCommands>(); // список комманд
         List<BackgroundWorker> threadList = new List<BackgroundWorker>(); // запуск ветки процесса на каждый хост.
         public List<serverControl> servers = new List<serverControl>(); // список хостов
         public int x = 25, y = 25;
@@ -201,17 +205,17 @@ namespace ARSMonitor
                 server.picktOnPath(picON);
                 server.picktOffPath(picOFF);
                 server.SetBounds(x, y, 200, 48);
-                
+
                 if (x + 405 > this.Width - 25)
                 {
                     x = 25;
                     y += 50;
                 }
                 else x += 205;
-                
+
                 panel1.Controls.Add(server);
                 //if (y + 50 > this.Height) {  }
-                 
+
             }
 
         }
@@ -452,11 +456,46 @@ namespace ARSMonitor
             serv.editMode = true;
         }
 
+
+        public event EventHandler<SocketEventArgs> eventFromMainForm;
+        public void sendCommand(string target, string programm, string parameters)
+        {
+            Thread.Sleep(2);
+            IPAddress addr = IPAddress.Parse(target);
+            Task.Factory.StartNew((Action)delegate
+            {
+                if (eventFromMainForm != null)
+                {
+                    eventFromMainForm(this, new SocketEventArgs(target, programm, parameters));
+                }
+            });
+        }
+
+        public void sendCommand(string target, string programm, string[] lines)
+        {
+            Thread.Sleep(2);
+            IPAddress addr = IPAddress.Parse(target);
+            Task.Factory.StartNew((Action)delegate
+            {
+                if (eventFromMainForm != null)
+                {
+                    eventFromMainForm(this, new SocketEventArgs(target, programm, lines));
+                }
+            });
+        }
+
         private void перезагрузитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             serverControl serv = contextMenuStrip1.SourceControl as serverControl;
-            string hN = getHostName(serv);
-            Process p = Process.Start(@"cmd.exe", @"/c shutdown /r /m " + hN + " & pause");
+            beforeSending(serv, sender);
+            // shutdown.exe", "-r -t 0
+            //Process p = Process.Start(@"cmd.exe", @"/c shutdown /r /m " + hN + " & pause");
+        }
+
+
+        private void beforeSending(serverControl serv, object sender)
+        {
+            sendCommand(serv.objectAddress, "shutdown.exe", "-r -t 0");
         }
 
         private static string getHostName(serverControl serv)
@@ -507,7 +546,7 @@ namespace ARSMonitor
         private void listenConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             log = new logNet();
-            AsynchronousSocketListener listen = new AsynchronousSocketListener();
+            listen = new AsynchronousSocketListener(this);
             //networkProtocol np = new networkProtocol();
             //np.serverList = servers;
             if (!backgroundWorker3.IsBusy)
@@ -528,7 +567,7 @@ namespace ARSMonitor
         private void backgroundWorker3_DoWork(object sender1, DoWorkEventArgs e1)
         {
             AsynchronousSocketListener listen = e1.Argument as AsynchronousSocketListener;
-            
+
 
             System.ComponentModel.BackgroundWorker worker;
             worker = (System.ComponentModel.BackgroundWorker)sender1;
@@ -544,20 +583,7 @@ namespace ARSMonitor
                     log.textBox1.AppendText(Environment.NewLine);
                 });
             };
-
-            /*Task.Factory.StartNew((Action)delegate
-                    {
-                        //mc.Run();
-                        listen.StartListening(worker, e1);
-                    });*/
             listen.StartListening(worker, e1);
-
-            /*
-            Task.Factory.StartNew((Action)delegate
-            {
-                //mc.Run();
-                aS.Start();
-            });*/
         }
 
         private void backgroundWorker3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -596,6 +622,36 @@ namespace ARSMonitor
         private void sendCommandToAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void добавитьКнопкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            addCommandButton();
+        }
+
+
+        private void addCommandButton()
+        {
+            //
+            expEdit = new MonitorExplorerEditor(this);
+            expEdit.Show();
+        }
+
+        public void addCommandButton1(object sender, EventArgs e)
+        {
+            //
+            //ToolStripMenuItem cms = sender as ToolStripMenuItem;
+            //MessageBox.Show(cms.Name);
+            serverControl serv = contextMenuStrip1.SourceControl as serverControl;
+            //ContextCommands cmd = commands.Find(x => x.commName == cms.Name);
+            ContextCommands cmd = sender as ContextCommands;
+            if (cmd.Multi) sendCommand(serv.objectAddress, cmd.commProgramm, cmd.commLines);
+            else sendCommand(serv.objectAddress, cmd.commProgramm, cmd.commParams);
+        }
+
+        private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            addCommandButton();
         }
     }
 }

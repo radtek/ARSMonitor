@@ -61,6 +61,10 @@
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.командыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.добавитьКнопкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -71,7 +75,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.connectionToolStripMenuItem,
-            this.featuresToolStripMenuItem});
+            this.featuresToolStripMenuItem,
+            this.командыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(591, 24);
@@ -284,9 +289,11 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.перезагрузкаToolStripMenuItem,
             this.переToolStripMenuItem,
-            this.удалитьToolStripMenuItem});
+            this.удалитьToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.добавитьКнопкуToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(178, 98);
             // 
             // перезагрузкаToolStripMenuItem
             // 
@@ -324,6 +331,33 @@
             this.backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             this.backgroundWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker3_RunWorkerCompleted);
+            // 
+            // командыToolStripMenuItem
+            // 
+            this.командыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.добавитьToolStripMenuItem});
+            this.командыToolStripMenuItem.Name = "командыToolStripMenuItem";
+            this.командыToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.командыToolStripMenuItem.Text = "Команды";
+            // 
+            // добавитьToolStripMenuItem
+            // 
+            this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem.Text = "Добавить";
+            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            // 
+            // добавитьКнопкуToolStripMenuItem
+            // 
+            this.добавитьКнопкуToolStripMenuItem.Name = "добавитьКнопкуToolStripMenuItem";
+            this.добавитьКнопкуToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.добавитьКнопкуToolStripMenuItem.Text = "Добавить кнопку...";
+            this.добавитьКнопкуToolStripMenuItem.Click += new System.EventHandler(this.добавитьКнопкуToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -373,7 +407,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem parallelToolStripMenuItem;
@@ -385,6 +418,11 @@
         private System.Windows.Forms.ToolStripMenuItem listenConnectionsToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
         private System.Windows.Forms.ToolStripMenuItem stopListeningToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem командыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem добавитьКнопкуToolStripMenuItem;
+        public System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
 

@@ -13,4 +13,24 @@ namespace ARSMonitor
             Message = msg;
         }
     }
+
+    public class SocketEventArgs : EventArgs
+    {
+        public readonly string programm;
+        public readonly string parameters;
+        public readonly string[] lines;
+        public readonly string address;
+        public SocketEventArgs(string ip, string prog, string param)
+        {
+            programm = prog;
+            parameters = param;
+            address = ip;
+        }
+        public SocketEventArgs(string ip, string prog, string[] lns)
+        {
+            programm = prog;
+            lines = lns;
+            address = ip;
+        }
+    }
 }
