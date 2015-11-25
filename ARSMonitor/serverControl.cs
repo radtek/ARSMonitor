@@ -20,7 +20,7 @@ namespace ARSMonitor
 {
     public partial class serverControl : System.Windows.Forms.UserControl
     {
-        MainForm parent;
+        //MainForm parent;
         public serverControl()
         {
             // parent = mf;

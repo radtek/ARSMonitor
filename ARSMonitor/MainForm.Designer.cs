@@ -372,6 +372,8 @@
             this.Name = "MainForm";
             this.Text = "Мониторинг компьютеров сети";
             this.Activated += new System.EventHandler(this.MainForm_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.Click += new System.EventHandler(this.Form1_Click);
             this.Move += new System.EventHandler(this.MainForm_Move);

@@ -45,15 +45,17 @@ namespace ARSMonitor
             string temp = textBox1.Text;
             while (temp.Contains(' ')) temp = temp.Replace(" ", "");
             parent.contextMenuStrip1.Items.Add(temp + "ToolStripMenuItem");
+            MessageBox.Show(temp + "ToolStripMenuItem");
             //while (textBox1.Text.Contains(' ')) textBox1.Text = textBox1.Text.Replace(" ", "");
             parent.contextMenuStrip1.Items[parent.contextMenuStrip1.Items.Count - 1].Text = textBox1.Text;
+            MessageBox.Show(textBox1.Text);
             parent.contextMenuStrip1.Items[parent.contextMenuStrip1.Items.Count - 1].Click += new System.EventHandler(parent.addCommandButton1);
             if (checkBox1.Checked)           ///////////////////////////////////////// ДОДЕЛАТЬ
             {
                 string[] lines = textBox3.Text.Split(' '); // символ переноса строки
                 cmd = new MainForm.ContextCommands(temp + "ToolStripMenuItem", textBox2.Text, lines);
             }
-            else cmd = new MainForm.ContextCommands(temp + "ToolStripMenuItem", textBox2.Text, textBox3.Text);
+            else cmd = new MainForm.ContextCommands(parent.contextMenuStrip1.Items[parent.contextMenuStrip1.Items.Count - 1], textBox2.Text, textBox3.Text);
             parent.commands.Add(cmd);
             Close();
         }

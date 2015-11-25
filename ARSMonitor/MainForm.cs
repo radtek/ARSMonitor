@@ -12,6 +12,12 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Soap;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ARSMonitor
 {
@@ -92,6 +98,7 @@ namespace ARSMonitor
 
         // Опции. Константы и переменные опций.
         Options o;
+        const string FileName = @"C:\ARSMonitor\CommandList.xml";
         string[] directotries = new string[3];
         public int speed1, speed2, speed3; // задержки при выполнении
         public bool isParallel = false; // переключатель типа обхода
@@ -640,11 +647,14 @@ namespace ARSMonitor
         public void addCommandButton1(object sender, EventArgs e)
         {
             //
-            //ToolStripMenuItem cms = sender as ToolStripMenuItem;
+            ToolStripMenuItem cms = sender as ToolStripMenuItem;
+            ContextCommands cmd = new ContextCommands();
             //MessageBox.Show(cms.Name);
             serverControl serv = contextMenuStrip1.SourceControl as serverControl;
-            //ContextCommands cmd = commands.Find(x => x.commName == cms.Name);
-            ContextCommands cmd = sender as ContextCommands;
+            cmd = commands.Find(x => x.commTS == cms);
+            //cmd = sender as ContextCommands;
+
+            MessageBox.Show(cmd.commName);
             if (cmd.Multi) sendCommand(serv.objectAddress, cmd.commProgramm, cmd.commLines);
             else sendCommand(serv.objectAddress, cmd.commProgramm, cmd.commParams);
         }
@@ -652,6 +662,113 @@ namespace ARSMonitor
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addCommandButton();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            saveOptions();
+            saveCommands();
+        }
+
+        public void saveCommands()
+        {
+            // export servers list into file
+            // экспорт списка серверов в файл
+            List<string> exportCommands = new List<string>();
+            List<ContextCommands> tmp = new List<ContextCommands>();
+            //int i = 0;
+            foreach (ContextCommands comm in commands)
+            {
+                if (comm.Multi) exportCommands.Add(comm.commName + " " + comm.commProgramm + " " + comm.commLines + Environment.NewLine);
+                else exportCommands.Add(comm.commName + " " + comm.commProgramm + " " + comm.commParams + Environment.NewLine);
+
+            }
+            //if ()
+            tmp = commands;
+            System.IO.File.WriteAllLines(@"C:\ARSMonitor\commands.dat", exportCommands.ToArray<string>());
+            //System.IO.File.WriteAllLines(@"C:\ARSMonitor\commands", tmp.ToArray<ContextCommands>());
+
+
+
+            //Stream TestFileStream = File.Create(FileName);
+            //BinaryFormatter serializer = new BinaryFormatter();
+            //SoapFormatter serializer = new SoapFormatter();
+            //serializer.Serialize(TestFileStream, commands);
+            //TestFileStream.Close();
+
+            XmlTextWriter xw = new XmlTextWriter(FileName, Encoding.UTF8);
+            //а это чтобы красиво было :)
+            xw.Formatting = Formatting.Indented;
+            XmlDictionaryWriter writer = XmlDictionaryWriter.CreateDictionaryWriter(xw);
+            //DataContractSerializer serializer = new DataContractSerializer(typeof(commandClassCollection));
+            DataContractSerializer serializer = new DataContractSerializer(typeof(List<ContextCommands>));
+            //commandClassCollection cCC = new commandClassCollection();
+            //cCC.Collection = commands;
+            serializer.WriteObject(writer, commands);
+            writer.Close();
+            xw.Close();
+        }
+
+        public void saveOptions()
+        {
+            int f = 0;
+            // файл опций жёстко структурирован
+            //string[] lines;
+
+
+            List<string> exportOptionsString = new List<string>();
+            //int i = 0;
+            exportOptionsString.Add(servPath);
+            exportOptionsString.Add(speed1.ToString());
+            exportOptionsString.Add(speed2.ToString());
+            exportOptionsString.Add(speed3.ToString());
+            if (isParallel == true)
+            {
+                exportOptionsString.Add("1");
+            }
+            else exportOptionsString.Add("0");
+            exportOptionsString.Add(picON);
+            exportOptionsString.Add(picOFF);
+
+            System.IO.File.WriteAllLines(@"C:\ARSMonitor\options.ini", exportOptionsString.ToArray<string>());
+
+            if (f != 0)
+                toolStripStatusLabel1.Text = "Options initialization failed on string number " + f.ToString() + "!";
+            else toolStripStatusLabel1.Text = "Options initialized successfully";
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if (File.Exists(FileName))
+            {
+
+                //commandClassCollection cCC = new commandClassCollection();
+                Stream TestFileStream = File.OpenRead(FileName);
+                //BinaryFormatter deserializer = new BinaryFormatter();
+                //SoapFormatter deserializer = new SoapFormatter();
+                var deserializer = new XmlSerializer(typeof(List<ContextCommands>));
+
+                try
+                {
+                    //cCC = (commandClassCollection)deserializer.Deserialize(TestFileStream);
+                    //commands = cCC.Collection;
+                    commands = (List<ContextCommands>)deserializer.Deserialize(TestFileStream);
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.ToString());
+                }
+                TestFileStream.Close();
+
+                if (commands != null)
+                    foreach (ContextCommands comm in commands)
+                    {
+                        MessageBox.Show(comm.commTSN + " " + comm.commTST);
+                        contextMenuStrip1.Items.Add(comm.commTSN);
+                        contextMenuStrip1.Items[contextMenuStrip1.Items.Count - 1].Text = comm.commTST;
+                        contextMenuStrip1.Items[contextMenuStrip1.Items.Count - 1].Click += new System.EventHandler(addCommandButton1);
+                    }
+            }
         }
     }
 }

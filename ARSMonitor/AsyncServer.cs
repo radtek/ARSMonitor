@@ -160,17 +160,7 @@ namespace ARSMonitor
 
             parent.eventFromMainForm += delegate(object sender, SocketEventArgs e)
             {
-                /*
-                handler.Invoke((Action)delegate
-                {
-                    Send(handler, e.programm + "<EOC>");
-                    sendDone.WaitOne();
-                    Send(handler, e.parameters + "<EOPN>");
-                    sendDone.WaitOne();
-                    Send(handler, "<SUBMIT>");
-                    sendDone.WaitOne();
-                });*/
-                if (((IPEndPoint)handler.RemoteEndPoint).Address.ToString() == e.address)
+                if ((((IPEndPoint)handler.RemoteEndPoint).Address.ToString() == e.address) && (handler.Connected))
                 {
                     Send(handler, e.programm + "<EOC>");
                     sendDone.WaitOne();
@@ -179,6 +169,7 @@ namespace ARSMonitor
                     Send(handler, "<SUBMIT>");
                     sendDone.WaitOne();
                 }
+                else showM("Handler is offline");
             };
         }
 
